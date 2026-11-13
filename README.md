@@ -142,12 +142,15 @@ Run the test suite (all tests are offline — no network, no keys):
 uv run pytest
 ```
 
-Lint and format:
+Lint, format, and type-check:
 
 ```bash
 uv run ruff check .
 uv run black .
+uv run mypy
 ```
 
+mypy runs in `--strict` mode over the shipped code (`src/` and `main.py`).
+
 Continuous integration (`.github/workflows/ci.yml`) runs ruff, black `--check`,
-and pytest on every push and pull request against Python 3.13.
+mypy, and pytest on every push and pull request against Python 3.13.

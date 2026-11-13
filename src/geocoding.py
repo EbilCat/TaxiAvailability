@@ -95,7 +95,8 @@ class NominatimGeocoder:
             timeout=self._timeout,
         )
         response.raise_for_status()
-        return response.json()
+        payload: dict[str, Any] = response.json()
+        return payload
 
     def _throttle(self) -> None:
         """Sleep as needed so requests are spaced by at least ``min_interval``."""

@@ -155,7 +155,8 @@ def _load_source(source: Path | None) -> dict[str, object]:
     """
     if source is None:
         return fetch_taxi_data()
-    return json.loads(source.read_text(encoding="utf-8"))
+    data: dict[str, object] = json.loads(source.read_text(encoding="utf-8"))
+    return data
 
 
 def _locate(geocoder: NominatimGeocoder, lat: float, lon: float) -> str:

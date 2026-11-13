@@ -66,7 +66,8 @@ def fetch_taxi_data(
                 url, timeout=timeout, headers={"Accept": "application/json"}
             )
             response.raise_for_status()
-            return response.json()
+            payload: dict[str, object] = response.json()
+            return payload
         except (httpx.TransportError, httpx.HTTPStatusError) as exc:
             if attempt == max_attempts or not _is_retryable(exc):
                 raise
@@ -103,4 +104,5 @@ def _backoff_seconds(attempt: int) -> float:
     Returns:
         The delay in seconds.
     """
-    return min(_BACKOFF_BASE_SECONDS * 2 ** (attempt - 1), _BACKOFF_CAP_SECONDS)
+    delay: float = _BACKOFF_BASE_SECONDS * 2 ** (attempt - 1)
+    return min(delay, _BACKOFF_CAP_SECONDS)
