@@ -148,3 +148,6 @@ Lint and format:
 uv run ruff check .
 uv run black .
 ```
+
+Continuous integration (`.github/workflows/ci.yml`) runs ruff, black `--check`,
+and pytest on every push and pull request against Python 3.13.
