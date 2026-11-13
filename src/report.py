@@ -29,17 +29,22 @@ def render_report(total: int, areas: Sequence[LocatedArea]) -> str:
     Returns:
         The formatted multi-line report string (no trailing newline).
     """
-    lines = [
-        f"Total available taxis: {total}",
-        "",
-        f"Top {len(areas)} areas with the most taxis:",
-    ]
+    header = (
+        f"Total available taxis: {total}\n"
+        f"\n"
+        f"Top {len(areas)} areas with the most taxis:"
+    )
+    blocks = []
     for rank, located in enumerate(areas, start=1):
         area = located.area
-        lines.append(f"{rank}. Lat: {area.lat}, Lon: {area.lon} - {area.count} taxis")
-        lines.append(f"   Location: {located.address}")
-        lines.append(f"   Google Maps: {google_maps_link(area.lat, area.lon)}")
-    return "\n".join(lines)
+        blocks.append(
+            f"{rank}. Lat: {area.lat}, Lon: {area.lon} - {area.count} taxis\n"
+            f"   Location: {located.address}\n"
+            f"   Google Maps: {google_maps_link(area.lat, area.lon)}"
+        )
+    if not blocks:
+        return header
+    return header + "\n\n" + "\n\n".join(blocks)
 
 
 @dataclass(frozen=True, slots=True)

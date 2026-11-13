@@ -14,9 +14,11 @@ def test_render_report_matches_sample_layout():
         "Total available taxis: 2003\n"
         "\n"
         "Top 2 areas with the most taxis:\n"
+        "\n"
         "1. Lat: 1.36, Lon: 103.99 - 83 taxis\n"
         "   Location: Jewel Changi Basement, Singapore\n"
         "   Google Maps: https://www.google.com/maps/search/?api=1&query=1.36,103.99\n"
+        "\n"
         "2. Lat: 1.32, Lon: 103.86 - 31 taxis\n"
         "   Location: 107, Towner Road, Kallang, Singapore\n"
         "   Google Maps: https://www.google.com/maps/search/?api=1&query=1.32,103.86"
@@ -32,4 +34,4 @@ def test_render_report_header_reflects_area_count():
 
 def test_render_report_with_no_areas():
     report = render_report(0, [])
-    assert report == ("Total available taxis: 0\n\nTop 0 areas with the most taxis:")
+    assert report == "Total available taxis: 0\n\nTop 0 areas with the most taxis:"
