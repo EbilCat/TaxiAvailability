@@ -119,6 +119,35 @@ Airport crowd as several adjacent cells (top cell ≈ 237 taxis), while `hotspot
 consolidates it into one area (≈ 280) and surfaces genuinely distinct areas
 lower in the ranking.
 
+## Choosing the grouping method
+
+The grid strategy came first — it is the obvious reading of the sample output,
+and it is simple and dependency-free. But a fixed grid has a flaw I wasn't happy
+with: a genuine crowd that happens to straddle a cell boundary is split across
+two or more cells, so it is under-counted and can rank below a smaller crowd that
+sits neatly inside one cell. The grid lines are arbitrary — they ignore where the
+taxis actually are.
+
+So I wanted an alternative that groups taxis by where they genuinely cluster. I
+came up with a **greedy fixed-radius hotspot** method: repeatedly take the
+densest remaining taxi as a seed, claim every taxi within a fixed radius as its
+area, and remove them so no taxi is counted twice. A crowd is captured whole,
+wherever it sits, and because every area is the same-size circle, the counts stay
+directly comparable as a measure of concentration.
+
+I also evaluated **DBSCAN**, the standard density-based clustering algorithm. It
+would likewise avoid the grid's boundary problem, but it produces clusters of
+**arbitrary shape and size**. The assignment asks for each area to be reported as
+a single latitude/longitude point (plus a Google Maps link), and an irregular,
+variable-size blob is not faithfully represented by one point. A fixed-radius
+hotspot, by contrast, *is* a centre point and a radius by construction — which
+maps exactly onto what the required output format expects. DBSCAN would also add
+two tuning parameters (`eps`, `min_samples`) and a heavier dependency for no gain
+here, so I chose the greedy hotspot method.
+
+Both strategies are kept and selectable via `--strategy`, with `hotspot` as the
+default and `grid` retained as the simpler, zero-dependency baseline.
+
 ## How it works
 
 The code follows a *pure core, imperative shell* split so the decision logic is
