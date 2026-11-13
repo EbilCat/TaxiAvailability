@@ -1,0 +1,8 @@
+# Example configuration for the Taxi Availability app.
+# Pass it with: uv run python main.py --config config.example.toml
+# Any command-line flag overrides the matching value here.
+
+strategy = "hotspot"   # "hotspot" (grow areas from dense points) or "grid"
+top = 10               # number of areas to report
+radius_m = 500         # hotspot footprint radius in metres (hotspot only)
+precision = 2          # decimal places for the reported coordinate
