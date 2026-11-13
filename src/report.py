@@ -30,9 +30,7 @@ def render_report(total: int, areas: Sequence[LocatedArea]) -> str:
         The formatted multi-line report string (no trailing newline).
     """
     header = (
-        f"Total available taxis: {total}\n"
-        f"\n"
-        f"Top {len(areas)} areas with the most taxis:"
+        f"Total available taxis: {total}\n\nTop {len(areas)} areas with the most taxis:"
     )
     blocks = []
     for rank, located in enumerate(areas, start=1):

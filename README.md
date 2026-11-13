@@ -164,7 +164,7 @@ default and `grid` retained as the simpler, zero-dependency baseline.
 │   └── fixtures/            # saved API snapshot for offline runs and tests
 ├── config.example.toml      # example configuration file
 ├── pyproject.toml           # project metadata, dependencies, tool config
-├── .github/workflows/ci.yml # CI: ruff, black, mypy, pytest
+├── .github/workflows/ci.yml # CI: ruff (lint + format), mypy, pytest
 └── README.md
 ```
 
@@ -194,12 +194,13 @@ uv run pytest
 Lint, format, and type-check:
 
 ```bash
-uv run ruff check .
-uv run black .
+uv run ruff check .      # lint + import sort
+uv run ruff format .     # format
 uv run mypy
 ```
 
 mypy runs in `--strict` mode over the shipped code (`src/` and `main.py`).
 
-Continuous integration (`.github/workflows/ci.yml`) runs ruff, black `--check`,
-mypy, and pytest on every push and pull request against Python 3.13.
+Continuous integration (`.github/workflows/ci.yml`) runs `ruff check`,
+`ruff format --check`, mypy, and pytest on every push and pull request against
+Python 3.13.
