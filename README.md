@@ -55,6 +55,12 @@ Run offline against the bundled sample snapshot, using the grid strategy:
 uv run python main.py --source tests/fixtures/taxi_availability_sample.json --strategy grid
 ```
 
+The live fetch retries transient failures (connection/timeout errors, `429`/`5xx`
+responses) with exponential backoff. On an expected failure — an unreachable
+API, an unreadable `--source`/`--config` file, a bad config, or malformed data —
+the program prints a one-line `Error: …` to stderr and exits non-zero (`1`)
+rather than a traceback.
+
 ### Configuration file
 
 Instead of flags, settings can live in a TOML file (any CLI flag still

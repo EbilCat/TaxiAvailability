@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import httpx
@@ -21,13 +22,36 @@ from src.grouping import DEFAULT_RADIUS_M, DEFAULT_STRATEGY, STRATEGIES, rank_ar
 from src.model import TaxiAvailability
 from src.report import LocatedArea, render_report
 
+EXIT_OK = 0
+EXIT_ERROR = 1
 
-def main(argv: list[str] | None = None) -> None:
-    """Run the full taxi-availability pipeline and print the report.
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the pipeline, reporting expected failures cleanly.
+
+    Expected failures — a bad config, an unreachable or misbehaving API, an
+    unreadable source/config file, or malformed data — are printed to stderr as
+    a one-line message and turned into a non-zero exit code, rather than a
+    traceback. Unexpected errors still propagate (fail loud on bugs).
 
     Args:
         argv: Command-line arguments; defaults to ``sys.argv[1:]``.
+
+    Returns:
+        ``EXIT_OK`` on success, ``EXIT_ERROR`` on an expected failure.
     """
+    try:
+        _run(argv)
+    except (httpx.HTTPError, OSError, ValueError) as exc:
+        # ValueError also covers TaxiDataError (bad API data), config validation,
+        # and JSON/TOML decode errors (both ValueError subclasses).
+        print(f"Error: {exc}", file=sys.stderr)
+        return EXIT_ERROR
+    return EXIT_OK
+
+
+def _run(argv: list[str] | None) -> None:
+    """Execute the full fetch -> group -> geocode -> render pipeline."""
     args = parse_args(argv)
     config = load_config(
         args.config,
@@ -218,4 +242,4 @@ def _positive_float(value: str) -> float:
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
