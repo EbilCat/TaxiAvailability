@@ -1,0 +1,16 @@
+[project]
+name = "taxiavailability"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "httpx>=0.28.1",
+]
+
+[dependency-groups]
+dev = [
+    "black>=26.10.1",
+    "pytest>=9.2.0",
+    "ruff>=0.17.5",
+]
