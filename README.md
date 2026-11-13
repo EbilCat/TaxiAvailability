@@ -148,6 +148,26 @@ here, so I chose the greedy hotspot method.
 Both strategies are kept and selectable via `--strategy`, with `hotspot` as the
 default and `grid` retained as the simpler, zero-dependency baseline.
 
+## Project structure
+
+```text
+.
+├── main.py                   # CLI entry point: wires the pipeline together
+├── src/
+│   ├── fetcher.py            # fetch taxi-availability GeoJSON (with retries)
+│   ├── model.py             # parse/validate GeoJSON into a typed snapshot
+│   ├── grouping.py          # grid + hotspot strategies, ranked areas
+│   ├── config.py            # resolve settings: defaults < TOML < CLI
+│   ├── geocoding.py         # reverse-geocode (Nominatim) + Google Maps link
+│   └── report.py            # render the report text
+├── tests/                   # offline unit tests (no network, no keys)
+│   └── fixtures/            # saved API snapshot for offline runs and tests
+├── config.example.toml      # example configuration file
+├── pyproject.toml           # project metadata, dependencies, tool config
+├── .github/workflows/ci.yml # CI: ruff, black, mypy, pytest
+└── README.md
+```
+
 ## How it works
 
 The code follows a *pure core, imperative shell* split so the decision logic is
