@@ -36,15 +36,6 @@ class NominatimGeocoder:
 
     A single instance is reused across a run so its rate-limiter and cache span
     all lookups. Results are cached in memory keyed by ``(lat, lon)``.
-
-    Args:
-        url: Nominatim reverse-geocode endpoint.
-        user_agent: ``User-Agent`` header identifying this app, as Nominatim's
-            usage policy requires. Must not carry personal details.
-        min_interval: Minimum seconds between network requests (policy: 1 req/s).
-        timeout: Per-request timeout in seconds.
-        fetcher: Seam for testing — a callable ``(lat, lon) -> payload`` that
-            returns the decoded JSON. Defaults to the real HTTP request.
     """
 
     def __init__(
@@ -56,6 +47,18 @@ class NominatimGeocoder:
         timeout: float = DEFAULT_TIMEOUT,
         fetcher: Callable[[float, float], dict[str, Any]] | None = None,
     ) -> None:
+        """Create a reverse geocoder.
+
+        Args:
+            url: Nominatim reverse-geocode endpoint.
+            user_agent: ``User-Agent`` header identifying this app, as Nominatim's
+                usage policy requires. Must not carry personal details.
+            min_interval: Minimum seconds between network requests (policy:
+                1 req/s).
+            timeout: Per-request timeout in seconds.
+            fetcher: Seam for testing — a callable ``(lat, lon) -> payload`` that
+                returns the decoded JSON. Defaults to the real HTTP request.
+        """
         self._url = url
         self._user_agent = user_agent
         self._min_interval = min_interval
