@@ -1,7 +1,7 @@
 [project]
 name = "taxiavailability"
 version = "0.1.0"
-description = "Add your description here"
+description = "Report Singapore's areas with the most available taxis from the data.gov.sg Taxi Availability API."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
